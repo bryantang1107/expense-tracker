@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,8 +13,56 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Field, FieldLabel } from '@/components/ui/field';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  InputGroup,
+  InputGroupInput,
+  InputGroupAddon,
+  InputGroupText,
+} from '@/components/ui/input-group';
+import DatePicker from '@/components/DatePicker';
 
 export default function ExpensePage() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading data
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const expenses = [
+    {
+      date: 'Oct 24, 2025',
+      title: 'Coffee',
+      category: 'Food',
+      amount: '-$4.50',
+    },
+    {
+      date: 'Oct 23, 2025',
+      title: 'Groceries',
+      category: 'Food',
+      amount: '-$62.19',
+    },
+    {
+      date: 'Oct 22, 2025',
+      title: 'Uber',
+      category: 'Transport',
+      amount: '-$18.40',
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-zinc-50 px-6 py-10 dark:bg-black">
       <header className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
@@ -38,34 +87,40 @@ export default function ExpensePage() {
                 Enter the details for your new expense.
               </DialogDescription>
             </DialogHeader>
-            <div className="flex flex-col gap-4 py-4">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="title">Title</Label>
-                <Input id="title" placeholder="e.g. Coffee, Groceries" />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="amount">Amount</Label>
-                <Input
+            <Field>
+              <FieldLabel>Title</FieldLabel>
+              <Input id="title" placeholder="e.g. Coffee, Groceries" />
+            </Field>
+            <Field>
+              <FieldLabel>Amount</FieldLabel>
+              <InputGroup>
+                <InputGroupAddon>
+                  <InputGroupText>RM</InputGroupText>
+                </InputGroupAddon>
+                <InputGroupInput
                   id="amount"
                   type="number"
                   placeholder="0.00"
                   step="0.01"
                 />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="category">Category</Label>
-                <select
-                  id="category"
-                  className="flex h-9 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-zinc-700"
-                >
-                  <option>Food</option>
-                  <option>Transport</option>
-                  <option>Shopping</option>
-                  <option>Entertainment</option>
-                  <option>Other</option>
-                </select>
-              </div>
-            </div>
+              </InputGroup>
+            </Field>
+            <Field>
+              <FieldLabel>Category</FieldLabel>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="food">Food</SelectItem>
+                  <SelectItem value="transport">Transport</SelectItem>
+                  <SelectItem value="shopping">Shopping</SelectItem>
+                  <SelectItem value="entertainment">Entertainment</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
+            <DatePicker />
             <DialogFooter>
               <Button type="submit" variant="outline">
                 Add Expense
@@ -76,21 +131,38 @@ export default function ExpensePage() {
       </header>
 
       <section className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <input
-          placeholder="Search title…"
-          className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-500 dark:focus:ring-zinc-700"
-        />
-        <select className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-zinc-700">
-          <option>All categories</option>
-          <option>Food</option>
-          <option>Transport</option>
-          <option>Shopping</option>
-        </select>
-        <select className="h-9 rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-zinc-700">
-          <option>This month</option>
-          <option>Last month</option>
-          <option>Last 3 months</option>
-        </select>
+        <Field>
+          <FieldLabel htmlFor="title">Title</FieldLabel>
+          <Input id="title" type="text" placeholder="Coffee, Groceries" />
+        </Field>
+        <Field>
+          <FieldLabel>Category</FieldLabel>
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Choose category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="food">Food</SelectItem>
+              <SelectItem value="transport">Transport</SelectItem>
+              <SelectItem value="shopping">Shopping</SelectItem>
+              <SelectItem value="entertainment">Entertainment</SelectItem>
+              <SelectItem value="other">Other</SelectItem>
+            </SelectContent>
+          </Select>
+        </Field>
+        <Field>
+          <FieldLabel>Date</FieldLabel>
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Choose date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="this month">This month</SelectItem>
+              <SelectItem value="last month">Last month</SelectItem>
+              <SelectItem value="last 3 months">Last 3 months</SelectItem>
+            </SelectContent>
+          </Select>
+        </Field>
       </section>
 
       <section className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
@@ -105,38 +177,39 @@ export default function ExpensePage() {
               </tr>
             </thead>
             <tbody className="text-sm text-zinc-900 dark:text-zinc-100">
-              {[
-                {
-                  date: 'Oct 24, 2025',
-                  title: 'Coffee',
-                  category: 'Food',
-                  amount: '-$4.50',
-                },
-                {
-                  date: 'Oct 23, 2025',
-                  title: 'Groceries',
-                  category: 'Food',
-                  amount: '-$62.19',
-                },
-                {
-                  date: 'Oct 22, 2025',
-                  title: 'Uber',
-                  category: 'Transport',
-                  amount: '-$18.40',
-                },
-              ].map((t, i) => (
-                <tr
-                  key={i}
-                  className="border-b border-zinc-100 last:border-0 dark:border-zinc-800"
-                >
-                  <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
-                    {t.date}
-                  </td>
-                  <td className="px-4 py-3">{t.title}</td>
-                  <td className="px-4 py-3">{t.category}</td>
-                  <td className="px-4 py-3">{t.amount}</td>
-                </tr>
-              ))}
+              {isLoading
+                ? Array.from({ length: 5 }).map((_, i) => (
+                    <tr
+                      key={i}
+                      className="border-b border-zinc-100 last:border-0 dark:border-zinc-800"
+                    >
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-24" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-32" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-20" />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Skeleton className="h-4 w-16" />
+                      </td>
+                    </tr>
+                  ))
+                : expenses.map((t, i) => (
+                    <tr
+                      key={i}
+                      className="border-b border-zinc-100 last:border-0 dark:border-zinc-800"
+                    >
+                      <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                        {t.date}
+                      </td>
+                      <td className="px-4 py-3">{t.title}</td>
+                      <td className="px-4 py-3">{t.category}</td>
+                      <td className="px-4 py-3">{t.amount}</td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>
