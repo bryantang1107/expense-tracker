@@ -1,18 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Field, FieldLabel } from '@/components/ui/field';
 import {
@@ -28,7 +17,8 @@ import {
   InputGroupAddon,
   InputGroupText,
 } from '@/components/ui/input-group';
-import DatePicker from '@/components/DatePicker';
+import DatePicker from '@/components/ui/DatePicker';
+import DialogModal from '@/components/modals/dialog-modal';
 
 export default function ExpensePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -74,60 +64,47 @@ export default function ExpensePage() {
             Track and review your spending
           </p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
-            <button className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-900 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800">
-              Add expense
-            </button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Add Expense</DialogTitle>
-              <DialogDescription>
-                Enter the details for your new expense.
-              </DialogDescription>
-            </DialogHeader>
-            <Field>
-              <FieldLabel>Title</FieldLabel>
-              <Input id="title" placeholder="e.g. Coffee, Groceries" />
-            </Field>
-            <Field>
-              <FieldLabel>Amount</FieldLabel>
-              <InputGroup>
-                <InputGroupAddon>
-                  <InputGroupText>RM</InputGroupText>
-                </InputGroupAddon>
-                <InputGroupInput
-                  id="amount"
-                  type="number"
-                  placeholder="0.00"
-                  step="0.01"
-                />
-              </InputGroup>
-            </Field>
-            <Field>
-              <FieldLabel>Category</FieldLabel>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="food">Food</SelectItem>
-                  <SelectItem value="transport">Transport</SelectItem>
-                  <SelectItem value="shopping">Shopping</SelectItem>
-                  <SelectItem value="entertainment">Entertainment</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </Field>
-            <DatePicker />
-            <DialogFooter>
-              <Button type="submit" variant="outline">
-                Add Expense
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <DialogModal
+          title="Add Expense"
+          description="Enter the details for your new expense."
+          triggerBtnText="Add Expense"
+          footerBtnText="Add Expense"
+        >
+          <Field>
+            <FieldLabel>Title</FieldLabel>
+            <Input id="title" placeholder="e.g. Coffee, Groceries" />
+          </Field>
+          <Field>
+            <FieldLabel>Amount</FieldLabel>
+            <InputGroup>
+              <InputGroupAddon>
+                <InputGroupText>RM</InputGroupText>
+              </InputGroupAddon>
+              <InputGroupInput
+                id="amount"
+                type="number"
+                placeholder="0.00"
+                step="0.01"
+              />
+            </InputGroup>
+          </Field>
+          <Field>
+            <FieldLabel>Category</FieldLabel>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Choose category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="food">Food</SelectItem>
+                <SelectItem value="transport">Transport</SelectItem>
+                <SelectItem value="shopping">Shopping</SelectItem>
+                <SelectItem value="entertainment">Entertainment</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+          <DatePicker />
+        </DialogModal>
       </header>
 
       <section className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -150,19 +127,7 @@ export default function ExpensePage() {
             </SelectContent>
           </Select>
         </Field>
-        <Field>
-          <FieldLabel>Date</FieldLabel>
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Choose date" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="this month">This month</SelectItem>
-              <SelectItem value="last month">Last month</SelectItem>
-              <SelectItem value="last 3 months">Last 3 months</SelectItem>
-            </SelectContent>
-          </Select>
-        </Field>
+        <DatePicker />
       </section>
 
       <section className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">

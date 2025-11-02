@@ -14,7 +14,7 @@ export default function DatePicker() {
   const [open, setOpen] = useState<boolean>(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-4">
       <Label htmlFor="date" className="px-1">
         Date
       </Label>
@@ -23,7 +23,7 @@ export default function DatePicker() {
           <Button
             variant="outline"
             id="date"
-            className="w-48 justify-between font-normal"
+            className="w-full justify-between font-normal"
           >
             {date ? date.toLocaleDateString() : 'Select date'}
             <ChevronDownIcon />
