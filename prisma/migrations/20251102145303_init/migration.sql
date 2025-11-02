@@ -5,7 +5,8 @@ CREATE TABLE "Expense" (
     "description" TEXT,
     "paymentMethod" TEXT,
     "amount" DECIMAL(65,30) NOT NULL,
-    "category" TEXT,
+    "category" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

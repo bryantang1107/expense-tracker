@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ChevronDownIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -8,11 +9,34 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { useState } from 'react';
 
-export default function DatePicker() {
+interface DatePickerProps {
+  value?: Date;
+  onChange?: (date: Date | undefined) => void;
+  allowFutureDates?: boolean;
+}
+
+export default function DatePicker({
+  value,
+  onChange,
+  allowFutureDates = false,
+}: DatePickerProps) {
   const [open, setOpen] = useState<boolean>(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const date = value;
+
+  const getMaxDate = () => {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    return today;
+  };
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    onChange?.(selectedDate);
+    setOpen(false);
+  };
+
+  const maxDate = allowFutureDates ? undefined : getMaxDate();
+
   return (
     <div className="flex flex-col gap-4">
       <Label htmlFor="date" className="px-1">
@@ -23,7 +47,9 @@ export default function DatePicker() {
           <Button
             variant="outline"
             id="date"
+            name="date"
             className="w-full justify-between font-normal"
+            type="button"
           >
             {date ? date.toLocaleDateString() : 'Select date'}
             <ChevronDownIcon />
@@ -34,10 +60,8 @@ export default function DatePicker() {
             mode="single"
             selected={date}
             captionLayout="dropdown"
-            onSelect={(date) => {
-              setDate(date);
-              setOpen(false);
-            }}
+            onSelect={handleDateSelect}
+            disabled={maxDate ? { after: maxDate } : undefined}
           />
         </PopoverContent>
       </Popover>

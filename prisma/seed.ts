@@ -9,6 +9,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 125.5,
     category: 'Food & Dining',
     paymentMethod: 'Credit Card',
+    date: new Date('2025-01-01'),
   },
   {
     title: 'Gas Station',
@@ -16,6 +17,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 45.0,
     category: 'Transportation',
     paymentMethod: 'Debit Card',
+    date: new Date('2025-01-02'),
   },
   {
     title: 'Netflix Subscription',
@@ -23,6 +25,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 15.99,
     category: 'Entertainment',
     paymentMethod: 'Credit Card',
+    date: new Date('2025-01-03'),
   },
   {
     title: 'Coffee Shop',
@@ -30,6 +33,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 5.75,
     category: 'Food & Dining',
     paymentMethod: 'Cash',
+    date: new Date('2025-01-04'),
   },
   {
     title: 'Amazon Purchase',
@@ -37,6 +41,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 89.99,
     category: 'Shopping',
     paymentMethod: 'Credit Card',
+    date: new Date('2025-01-05'),
   },
   {
     title: 'Restaurant Dinner',
@@ -44,6 +49,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 85.0,
     category: 'Food & Dining',
     paymentMethod: 'Credit Card',
+    date: new Date('2025-01-06'),
   },
   {
     title: 'Uber Ride',
@@ -51,6 +57,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 32.5,
     category: 'Transportation',
     paymentMethod: 'Credit Card',
+    date: new Date('2025-01-07'),
   },
   {
     title: 'Gym Membership',
@@ -58,6 +65,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 49.99,
     category: 'Health & Fitness',
     paymentMethod: 'Bank Transfer',
+    date: new Date('2025-01-08'),
   },
   {
     title: 'Movie Tickets',
@@ -65,6 +73,7 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 24.0,
     category: 'Entertainment',
     paymentMethod: 'Credit Card',
+    date: new Date('2025-01-09'),
   },
   {
     title: 'Pharmacy',
@@ -72,13 +81,14 @@ const PrismaExpense: Prisma.ExpenseCreateInput[] = [
     amount: 35.5,
     category: 'Health & Fitness',
     paymentMethod: 'Insurance',
+    date: new Date('2025-01-08'),
   },
 ];
 
 export async function main() {
   console.log('🌱 Seeding expense data...');
 
-  // Clear existing data (optional - comment out if you want to keep existing data)
+  //clear existing data
   await prisma.expense.deleteMany();
 
   for (const expense of PrismaExpense) {

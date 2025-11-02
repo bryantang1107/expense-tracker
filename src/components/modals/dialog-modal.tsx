@@ -15,6 +15,9 @@ interface DialogModalProps {
   children: React.ReactNode;
   triggerBtnText: string;
   footerBtnText: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  isSubmitting?: boolean;
 }
 
 export default function DialogModal({
@@ -23,9 +26,12 @@ export default function DialogModal({
   children,
   triggerBtnText,
   footerBtnText,
+  open,
+  onOpenChange,
+  isSubmitting = false,
 }: DialogModalProps) {
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <button className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-900 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800">
           {triggerBtnText}
@@ -38,8 +44,13 @@ export default function DialogModal({
         </DialogHeader>
         {children}
         <DialogFooter>
-          <Button type="submit" variant="outline">
-            {footerBtnText}
+          <Button
+            type="submit"
+            form="expense-form"
+            variant="outline"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Adding...' : footerBtnText}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -17,7 +17,7 @@ export default async function ExpensePage() {
     title: expense.title,
     category: expense.category || '-',
     amount: Number(expense.amount),
-    date: format(new Date(expense.createdAt), 'MMM d, yyyy'),
+    date: format(new Date(expense.date), 'MMM d, yyyy'),
   }));
 
   return (

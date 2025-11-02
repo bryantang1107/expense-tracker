@@ -16,5 +16,5 @@ export interface ExpenseFormData {
   amount: number;
   category?: string;
   paymentMethod?: string;
-  date?: Date;
+  date: Date;
 }
