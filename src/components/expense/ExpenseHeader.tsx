@@ -20,7 +20,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import DatePicker from '@/components/ui/DatePicker';
-import type { ExpenseFormData } from '@/types/expense';
+import type {
+  ExpenseFormData,
+  ExpenseCategory,
+  PaymentMethod,
+} from '@/types/expense';
+import { EXPENSE_CATEGORIES, PAYMENT_METHODS } from '@/types/expense';
 
 export default function ExpenseHeader() {
   const router = useRouter();
@@ -30,8 +35,8 @@ export default function ExpenseHeader() {
     title: '',
     description: '',
     amount: 0,
-    category: '',
-    paymentMethod: '',
+    category: undefined,
+    paymentMethod: undefined,
     date: new Date(),
   });
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -151,52 +156,18 @@ export default function ExpenseHeader() {
               name="category"
               value={formData.category || ''}
               onValueChange={(value) =>
-                setFormData({ ...formData, category: value })
+                setFormData({ ...formData, category: value as ExpenseCategory })
               }
             >
               <SelectTrigger id="category">
                 <SelectValue placeholder="Choose category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Housing / Rent / Mortgage">
-                  Housing / Rent / Mortgage
-                </SelectItem>
-                <SelectItem value="Utilities (electricity, water, internet)">
-                  Utilities (electricity, water, internet)
-                </SelectItem>
-                <SelectItem value="Groceries">Groceries</SelectItem>
-                <SelectItem value="Transportation (fuel, parking, public transit)">
-                  Transportation (fuel, parking, public transit)
-                </SelectItem>
-                <SelectItem value="Food & Dining (restaurants, cafés, takeout)">
-                  Food & Dining (restaurants, cafés, takeout)
-                </SelectItem>
-                <SelectItem value="Shopping (clothes, gadgets, etc.)">
-                  Shopping (clothes, gadgets, etc.)
-                </SelectItem>
-                <SelectItem value="Entertainment (movies, games, subscriptions)">
-                  Entertainment (movies, games, subscriptions)
-                </SelectItem>
-                <SelectItem value="Health & Fitness (gym, supplements, medical)">
-                  Health & Fitness (gym, supplements, medical)
-                </SelectItem>
-                <SelectItem value="Insurance">Insurance</SelectItem>
-                <SelectItem value="Loans / Debt Payments">
-                  Loans / Debt Payments
-                </SelectItem>
-                <SelectItem value="Savings / Investments">
-                  Savings / Investments
-                </SelectItem>
-                <SelectItem value="Education (books, courses)">
-                  Education (books, courses)
-                </SelectItem>
-                <SelectItem value="Travel">Travel</SelectItem>
-                <SelectItem value="Gifts / Donations">
-                  Gifts / Donations
-                </SelectItem>
-                <SelectItem value="Other / Miscellaneous">
-                  Other / Miscellaneous
-                </SelectItem>
+                {EXPENSE_CATEGORIES.map((category) => (
+                  <SelectItem key={category.value} value={category.value}>
+                    {category.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </Field>
@@ -206,20 +177,21 @@ export default function ExpenseHeader() {
               name="paymentMethod"
               value={formData.paymentMethod || ''}
               onValueChange={(value) =>
-                setFormData({ ...formData, paymentMethod: value })
+                setFormData({
+                  ...formData,
+                  paymentMethod: value as PaymentMethod,
+                })
               }
             >
               <SelectTrigger id="paymentMethod">
                 <SelectValue placeholder="Choose payment method" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Cash">Cash</SelectItem>
-                <SelectItem value="GrabPay">GrabPay</SelectItem>
-                <SelectItem value="Touch 'n Go">Touch 'n Go</SelectItem>
-                <SelectItem value="Debit/Credit Card">
-                  Debit/Credit Card
-                </SelectItem>
-                <SelectItem value="Other">Other</SelectItem>
+                {PAYMENT_METHODS.map((method) => (
+                  <SelectItem key={method.value} value={method.value}>
+                    {method.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </Field>

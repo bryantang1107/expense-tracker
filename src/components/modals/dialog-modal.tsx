@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { PlusIcon } from '@heroicons/react/24/outline';
 
 interface DialogModalProps {
   title: string;
@@ -33,7 +34,8 @@ export default function DialogModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <button className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-900 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800">
+        <button className="flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-900 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800">
+          <PlusIcon className="h-4 w-4" />
           {triggerBtnText}
         </button>
       </DialogTrigger>

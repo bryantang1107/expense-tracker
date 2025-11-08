@@ -1,7 +1,11 @@
 'use client';
 
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useTransition, useState, useEffect } from 'react';
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -10,30 +14,140 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import DatePicker from '@/components/ui/DatePicker';
+import { EXPENSE_CATEGORIES } from '@/types/expense';
+import { useDebounce } from '@/hooks/useDebounce';
 
 export default function ExpenseFilters() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
+  const [titleValue, setTitleValue] = useState(searchParams.get('title') || '');
+
+  // Debounced title value
+  const debouncedTitle = useDebounce(titleValue, 500);
+
+  // Update URL when debounced title changes
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (debouncedTitle) {
+      params.set('title', debouncedTitle);
+    } else {
+      params.delete('title');
+    }
+
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`);
+    });
+  }, [debouncedTitle]);
+
+  const updateFilter = (key: string, value: string | undefined) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`);
+    });
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitleValue(e.target.value);
+  };
+
+  const handleCategoryChange = (value: string) => {
+    updateFilter('category', value || undefined);
+  };
+
+  const handleDateChange = (date: Date | undefined) => {
+    if (date) {
+      const dateStr = `${date.getFullYear()}-${String(
+        date.getMonth() + 1
+      ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      updateFilter('date', dateStr);
+    } else {
+      updateFilter('date', undefined);
+    }
+  };
+
+  const currentDate = searchParams.get('date')
+    ? new Date(searchParams.get('date')!)
+    : undefined;
+
+  const hasActiveFilters =
+    searchParams.get('title') ||
+    searchParams.get('category') ||
+    searchParams.get('date');
+
+  const clearFilters = () => {
+    setTitleValue('');
+    startTransition(() => {
+      router.push(pathname);
+    });
+  };
+
   return (
-    <section className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-      <Field>
-        <FieldLabel htmlFor="title">Title</FieldLabel>
-        <Input id="title" type="text" placeholder="Coffee, Groceries" />
-      </Field>
-      <Field>
-        <FieldLabel>Category</FieldLabel>
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder="Choose category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="food">Food</SelectItem>
-            <SelectItem value="transport">Transport</SelectItem>
-            <SelectItem value="shopping">Shopping</SelectItem>
-            <SelectItem value="entertainment">Entertainment</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
-          </SelectContent>
-        </Select>
-      </Field>
-      <DatePicker />
+    <section className="mb-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <Field>
+          <FieldLabel htmlFor="title">Title</FieldLabel>
+          <div className="relative">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+            <Input
+              id="title"
+              type="text"
+              placeholder="Coffee, Groceries"
+              className="pl-9"
+              value={titleValue}
+              onChange={handleTitleChange}
+              disabled={isPending}
+            />
+          </div>
+        </Field>
+        <Field>
+          <FieldLabel>Category</FieldLabel>
+          <Select
+            value={searchParams.get('category') || ''}
+            onValueChange={handleCategoryChange}
+            disabled={isPending}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Choose category" />
+            </SelectTrigger>
+            <SelectContent>
+              {EXPENSE_CATEGORIES.map((category) => (
+                <SelectItem key={category.value} value={category.value}>
+                  {category.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+        <DatePicker
+          value={currentDate}
+          onChange={handleDateChange}
+          allowFutureDates={true}
+        />
+      </div>
+      <div className="mt-3 flex items-center justify-end">
+        {hasActiveFilters && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={clearFilters}
+            disabled={isPending}
+            className="h-8 gap-1.5 text-xs"
+          >
+            <XMarkIcon className="h-3.5 w-3.5" />
+            Clear Filters
+          </Button>
+        )}
+      </div>
     </section>
   );
 }
