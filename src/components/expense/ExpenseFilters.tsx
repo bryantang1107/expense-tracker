@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useTransition, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -21,13 +21,10 @@ export default function ExpenseFilters() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const [isPending, startTransition] = useTransition();
   const [titleValue, setTitleValue] = useState(searchParams.get('title') || '');
 
-  // Debounced title value
   const debouncedTitle = useDebounce(titleValue, 500);
 
-  // Update URL when debounced title changes
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -37,10 +34,8 @@ export default function ExpenseFilters() {
       params.delete('title');
     }
 
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
-    });
-  }, [debouncedTitle]);
+    router.push(`${pathname}?${params.toString()}`);
+  }, [debouncedTitle, pathname, searchParams, router]);
 
   const updateFilter = (key: string, value: string | undefined) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -51,9 +46,7 @@ export default function ExpenseFilters() {
       params.delete(key);
     }
 
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
-    });
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,9 +79,7 @@ export default function ExpenseFilters() {
 
   const clearFilters = () => {
     setTitleValue('');
-    startTransition(() => {
-      router.push(pathname);
-    });
+    router.push(pathname);
   };
 
   return (
@@ -105,7 +96,6 @@ export default function ExpenseFilters() {
               className="pl-9"
               value={titleValue}
               onChange={handleTitleChange}
-              disabled={isPending}
             />
           </div>
         </Field>
@@ -114,7 +104,6 @@ export default function ExpenseFilters() {
           <Select
             value={searchParams.get('category') || ''}
             onValueChange={handleCategoryChange}
-            disabled={isPending}
           >
             <SelectTrigger>
               <SelectValue placeholder="Choose category" />
@@ -137,11 +126,9 @@ export default function ExpenseFilters() {
       <div className="mt-3 flex items-center justify-end">
         {hasActiveFilters && (
           <Button
-            variant="outline"
             size="sm"
             onClick={clearFilters}
-            disabled={isPending}
-            className="h-8 gap-1.5 text-xs"
+            className="h-8 gap-1.5 text-xs bg-red-500 hover:bg-red-800 text-white"
           >
             <XMarkIcon className="h-3.5 w-3.5" />
             Clear Filters

@@ -1,6 +1,8 @@
+import { Suspense } from 'react';
 import { format, startOfDay, endOfDay } from 'date-fns';
 import prisma from '@/lib/prisma';
 import ExpenseTable from '@/components/expense/ExpenseTable';
+import ExpenseTableSkeleton from '@/components/expense/ExpenseTableSkeleton';
 import ExpenseHeader from '@/components/expense/ExpenseHeader';
 import ExpenseFilters from '@/components/expense/ExpenseFilters';
 import type { ExpenseData, PrismaExpense } from '@/types/expense';
@@ -15,7 +17,15 @@ interface ExpensePageProps {
   }>;
 }
 
-export default async function ExpensePage({ searchParams }: ExpensePageProps) {
+async function ExpenseTableContent({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    title?: string;
+    category?: string;
+    date?: string;
+  }>;
+}) {
   const params = await searchParams;
   const { title, category, date } = params;
 
@@ -56,11 +66,17 @@ export default async function ExpensePage({ searchParams }: ExpensePageProps) {
     date: format(new Date(expense.date), 'MMM d, yyyy'),
   }));
 
+  return <ExpenseTable expenses={formattedExpense} />;
+}
+
+export default async function ExpensePage({ searchParams }: ExpensePageProps) {
   return (
     <div className="min-h-screen bg-zinc-50 px-6 py-10 dark:bg-black">
       <ExpenseHeader />
       <ExpenseFilters />
-      <ExpenseTable expenses={formattedExpense} />
+      <Suspense fallback={<ExpenseTableSkeleton />}>
+        <ExpenseTableContent searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }
