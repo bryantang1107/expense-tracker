@@ -6,7 +6,12 @@ import ExpenseTableSkeleton from '@/components/expense/ExpenseTableSkeleton';
 import ExpenseHeader from '@/components/expense/ExpenseHeader';
 import ExpenseFilters from '@/components/expense/ExpenseFilters';
 import type { ExpenseData, PrismaExpense } from '@/types/expense';
-import { getCategoryLabel, getPaymentMethodLabel } from '@/types/expense';
+import {
+  getCategoryLabel,
+  getCategoryIcon,
+  getPaymentMethodLabel,
+  getPaymentMethodIcon,
+} from '@/types/expense';
 import type { Prisma } from '../../../generated/prisma/client';
 
 interface ExpensePageProps {
@@ -17,15 +22,7 @@ interface ExpensePageProps {
   }>;
 }
 
-async function ExpenseTableContent({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    title?: string;
-    category?: string;
-    date?: string;
-  }>;
-}) {
+async function ExpenseTableContent({ searchParams }: ExpensePageProps) {
   const params = await searchParams;
   const { title, category, date } = params;
 
@@ -60,8 +57,14 @@ async function ExpenseTableContent({
   const formattedExpense: ExpenseData[] = expenses.map((expense) => ({
     id: expense.id,
     title: expense.title,
-    category: getCategoryLabel(expense.category),
-    paymentMethod: getPaymentMethodLabel(expense.paymentMethod),
+    category: {
+      label: getCategoryLabel(expense.category),
+      iconString: getCategoryIcon(expense.category),
+    },
+    paymentMethod: {
+      label: getPaymentMethodLabel(expense.paymentMethod),
+      iconString: getPaymentMethodIcon(expense.paymentMethod),
+    },
     amount: Number(expense.amount),
     date: format(new Date(expense.date), 'MMM d, yyyy'),
   }));

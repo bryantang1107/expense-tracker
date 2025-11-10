@@ -14,8 +14,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import DatePicker from '@/components/ui/DatePicker';
-import { EXPENSE_CATEGORIES } from '@/types/expense';
+import { CATEGORY_MAP } from '@/types/expense';
 import { useDebounce } from '@/hooks/useDebounce';
+import { getHeroIcon } from '@/lib/icons';
 
 export default function ExpenseFilters() {
   const searchParams = useSearchParams();
@@ -109,11 +110,17 @@ export default function ExpenseFilters() {
               <SelectValue placeholder="Choose category" />
             </SelectTrigger>
             <SelectContent>
-              {EXPENSE_CATEGORIES.map((category) => (
-                <SelectItem key={category.value} value={category.value}>
-                  {category.label}
-                </SelectItem>
-              ))}
+              {Object.values(CATEGORY_MAP).map((category) => {
+                const Icon = getHeroIcon(category.icon);
+                return (
+                  <SelectItem key={category.value} value={category.value}>
+                    <div className="flex items-center gap-2">
+                      {Icon && <Icon className="h-4 w-4" />}
+                      <span>{category.label}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         </Field>

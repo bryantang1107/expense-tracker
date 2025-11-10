@@ -25,21 +25,21 @@ import type {
   ExpenseCategory,
   PaymentMethod,
 } from '@/types/expense';
-import { EXPENSE_CATEGORIES, PAYMENT_METHODS } from '@/types/expense';
+import { CATEGORY_MAP, PAYMENT_METHOD_MAP } from '@/types/expense';
+import { getHeroIcon } from '@/lib/icons';
 
 export default function ExpenseHeader() {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [formData, setFormData] = useState<ExpenseFormData>({
     title: '',
     description: '',
     amount: 0,
-    category: undefined,
-    paymentMethod: undefined,
-    date: new Date(),
+    category: 'other',
+    paymentMethod: 'cash',
+    date: undefined,
   });
-  const [date, setDate] = useState<Date | undefined>(undefined);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,7 +57,7 @@ export default function ExpenseHeader() {
           amount: Number(formData.amount),
           category: formData.category || undefined,
           paymentMethod: formData.paymentMethod || undefined,
-          date: date?.toISOString(),
+          date: formData.date?.toISOString(),
         }),
       });
 
@@ -163,11 +163,17 @@ export default function ExpenseHeader() {
                 <SelectValue placeholder="Choose category" />
               </SelectTrigger>
               <SelectContent>
-                {EXPENSE_CATEGORIES.map((category) => (
-                  <SelectItem key={category.value} value={category.value}>
-                    {category.label}
-                  </SelectItem>
-                ))}
+                {Object.values(CATEGORY_MAP).map((category) => {
+                  const Icon = getHeroIcon(category.icon);
+                  return (
+                    <SelectItem key={category.value} value={category.value}>
+                      <div className="flex items-center gap-2">
+                        {Icon && <Icon className="h-4 w-4" />}
+                        <span>{category.label}</span>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </Field>
@@ -187,15 +193,30 @@ export default function ExpenseHeader() {
                 <SelectValue placeholder="Choose payment method" />
               </SelectTrigger>
               <SelectContent>
-                {PAYMENT_METHODS.map((method) => (
-                  <SelectItem key={method.value} value={method.value}>
-                    {method.label}
-                  </SelectItem>
-                ))}
+                {Object.values(PAYMENT_METHOD_MAP).map((method) => {
+                  const image = method.image;
+                  return (
+                    <SelectItem key={method.value} value={method.value}>
+                      <div className="flex items-center gap-2">
+                        {image && (
+                          <img
+                            src={image}
+                            alt={method.label}
+                            className="h-4 w-4 object-contain"
+                          />
+                        )}
+                        <span>{method.label}</span>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </Field>
-          <DatePicker value={date} onChange={setDate} />
+          <DatePicker
+            value={formData.date}
+            onChange={(date) => setFormData({ ...formData, date })}
+          />
           <button
             type="submit"
             disabled={isSubmitting}

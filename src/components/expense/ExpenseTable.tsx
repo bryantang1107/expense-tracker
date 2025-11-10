@@ -5,6 +5,7 @@ import {
   CreditCardIcon,
 } from '@heroicons/react/24/outline';
 import type { ExpenseData } from '@/types/expense';
+import { getHeroIcon } from '@/lib/icons';
 
 interface ExpenseTableProps {
   expenses: ExpenseData[];
@@ -68,9 +69,27 @@ export default function ExpenseTable({ expenses }: ExpenseTableProps) {
                     {expense.date}
                   </td>
                   <td className="px-4 py-3">{expense.title}</td>
-                  <td className="px-4 py-3">{expense.category}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      {expense.category.iconString &&
+                        (() => {
+                          const Icon = getHeroIcon(expense.category.iconString);
+                          return Icon ? <Icon className="h-4 w-4" /> : null;
+                        })()}
+                      <span>{expense.category.label}</span>
+                    </div>
+                  </td>
                   <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
-                    {expense.paymentMethod}
+                    <div className="flex items-center gap-2">
+                      {expense.paymentMethod.iconString && (
+                        <img
+                          src={expense.paymentMethod.iconString}
+                          alt={expense.paymentMethod.label}
+                          className="h-4 w-4 object-contain"
+                        />
+                      )}
+                      <span>{expense.paymentMethod.label}</span>
+                    </div>
                   </td>
                   <td className="px-4 py-3">{formatAmount(expense.amount)}</td>
                 </tr>
