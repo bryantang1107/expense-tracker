@@ -57,16 +57,20 @@ async function ExpenseTableContent({ searchParams }: ExpensePageProps) {
   const formattedExpense: ExpenseData[] = expenses.map((expense) => ({
     id: expense.id,
     title: expense.title,
+    description: expense.description || undefined,
     category: {
       label: getCategoryLabel(expense.category),
       iconString: getCategoryIcon(expense.category),
+      value: expense.category || 'other',
     },
     paymentMethod: {
       label: getPaymentMethodLabel(expense.paymentMethod),
       iconString: getPaymentMethodIcon(expense.paymentMethod),
+      value: expense.paymentMethod || 'cash',
     },
     amount: Number(expense.amount),
     date: format(new Date(expense.date), 'MMM d, yyyy'),
+    rawDate: new Date(expense.date),
   }));
 
   return <ExpenseTable expenses={formattedExpense} />;

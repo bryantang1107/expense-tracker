@@ -101,16 +101,20 @@ export const getPaymentMethodIcon = (value: string | null) => {
 export interface ExpenseData {
   id: number;
   title: string;
+  description?: string;
   category: {
     label: string;
     iconString: string;
+    value: string;
   };
   paymentMethod: {
     label: string;
     iconString: string;
+    value: string;
   };
   amount: number;
   date: string;
+  rawDate: Date;
 }
 
 export interface ExpenseFormData {

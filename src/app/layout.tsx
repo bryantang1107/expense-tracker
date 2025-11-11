@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Sidebar from '@/components/layout/Sidebar';
+import { ModalProvider } from '@/contexts/ModalContext';
+import Modal from '@/components/modals/Modal';
 import './globals.css';
 
 const geistSans = Geist({
@@ -28,12 +30,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
-          <div className="mx-auto flex w-full gap-0">
-            <Sidebar />
-            <main className="flex-1 px-6 py-8">{children}</main>
+        <ModalProvider>
+          <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
+            <div className="mx-auto flex w-full gap-0">
+              <Sidebar />
+              <main className="flex-1 px-6 py-8">{children}</main>
+            </div>
           </div>
-        </div>
+          <Modal />
+        </ModalProvider>
       </body>
     </html>
   );

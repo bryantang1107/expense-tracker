@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CalendarIcon,
   BanknotesIcon,
@@ -6,12 +8,65 @@ import {
 } from '@heroicons/react/24/outline';
 import type { ExpenseData } from '@/types/expense';
 import { getHeroIcon } from '@/lib/icons';
+import ExpenseForm from './ExpenseForm';
+import { useModal } from '@/contexts/ModalContext';
+import { useCallback } from 'react';
+import type { ExpenseFormData } from '@/types/expense';
+import { useRouter } from 'next/navigation';
+import { submitExpense } from '@/lib/api/expense';
 
 interface ExpenseTableProps {
   expenses: ExpenseData[];
 }
 
 export default function ExpenseTable({ expenses }: ExpenseTableProps) {
+  const { openModal, closeModal } = useModal();
+  const router = useRouter();
+
+  const handleSubmit = useCallback(
+    async (
+      formData: ExpenseFormData,
+      mode: 'create' | 'edit',
+      expenseId?: number
+    ) => {
+      try {
+        await submitExpense(formData, mode, expenseId);
+        closeModal();
+        router.refresh();
+      } catch (error) {
+        alert(`Failed to ${mode} expense. Please try again.`);
+      }
+    },
+    [closeModal, router]
+  );
+
+  const openEditModal = useCallback(
+    (expense: ExpenseData) => {
+      const formData: ExpenseFormData = {
+        title: expense.title,
+        description: expense.description || '',
+        amount: expense.amount,
+        category: expense.category.value as any,
+        paymentMethod: expense.paymentMethod.value as any,
+        date: expense.rawDate,
+      };
+
+      openModal(
+        <ExpenseForm
+          initialData={formData}
+          mode="edit"
+          expenseId={expense.id}
+          onSubmit={handleSubmit}
+        />,
+        {
+          title: 'Edit Expense',
+          description: 'Update the details for this expense.',
+          size: 'md',
+        }
+      );
+    },
+    [openModal, handleSubmit]
+  );
   const formatAmount = (amount: number) => {
     return `-RM${amount.toFixed(2)}`;
   };
@@ -63,7 +118,8 @@ export default function ExpenseTable({ expenses }: ExpenseTableProps) {
               expenses.map((expense) => (
                 <tr
                   key={expense.id}
-                  className="border-b border-zinc-100 last:border-0 dark:border-zinc-800"
+                  onClick={() => openEditModal(expense)}
+                  className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800 cursor-pointer transition-colors"
                 >
                   <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
                     {expense.date}
