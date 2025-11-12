@@ -6,6 +6,7 @@ import {
   DocumentTextIcon,
   CreditCardIcon,
 } from '@heroicons/react/24/outline';
+import { toast } from 'sonner';
 import type { ExpenseData } from '@/types/expense';
 import { getHeroIcon } from '@/lib/icons';
 import ExpenseForm from './ExpenseForm';
@@ -13,7 +14,7 @@ import { useModal } from '@/contexts/ModalContext';
 import { useCallback } from 'react';
 import type { ExpenseFormData } from '@/types/expense';
 import { useRouter } from 'next/navigation';
-import { submitExpense } from '@/lib/api/expense';
+import { submitExpense, deleteExpense } from '@/lib/api/expense';
 
 interface ExpenseTableProps {
   expenses: ExpenseData[];
@@ -33,8 +34,31 @@ export default function ExpenseTable({ expenses }: ExpenseTableProps) {
         await submitExpense(formData, mode, expenseId);
         closeModal();
         router.refresh();
+        toast.success('Expense added successfully');
       } catch (error) {
-        alert(`Failed to ${mode} expense. Please try again.`);
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : `Failed to ${mode} expense. Please try again.`;
+        toast.error(errorMessage);
+      }
+    },
+    [closeModal, router]
+  );
+
+  const handleDelete = useCallback(
+    async (expenseId: number) => {
+      try {
+        await deleteExpense(expenseId);
+        closeModal();
+        router.refresh();
+        toast.success('Expense deleted successfully');
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'Failed to delete expense. Please try again.';
+        toast.error(errorMessage);
       }
     },
     [closeModal, router]
@@ -57,6 +81,7 @@ export default function ExpenseTable({ expenses }: ExpenseTableProps) {
           mode="edit"
           expenseId={expense.id}
           onSubmit={handleSubmit}
+          onDelete={handleDelete}
         />,
         {
           title: 'Edit Expense',
@@ -65,7 +90,7 @@ export default function ExpenseTable({ expenses }: ExpenseTableProps) {
         }
       );
     },
-    [openModal, handleSubmit]
+    [openModal, handleSubmit, handleDelete]
   );
   const formatAmount = (amount: number) => {
     return `-RM${amount.toFixed(2)}`;

@@ -3,8 +3,9 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { toast } from 'sonner';
 import ExpenseForm from '@/components/expense/ExpenseForm';
-import type { ExpenseFormData, ExpenseData } from '@/types/expense';
+import type { ExpenseFormData } from '@/types/expense';
 import { useModal } from '@/contexts/ModalContext';
 import { submitExpense } from '@/lib/api/expense';
 
@@ -22,8 +23,13 @@ export default function ExpenseHeader() {
         await submitExpense(formData, mode, expenseId);
         closeModal();
         router.refresh();
+        toast.success('Expense added successfully');
       } catch (error) {
-        alert(`Failed to ${mode} expense. Please try again.`);
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : `Failed to ${mode} expense. Please try again.`;
+        toast.error(errorMessage);
       }
     },
     [closeModal, router]

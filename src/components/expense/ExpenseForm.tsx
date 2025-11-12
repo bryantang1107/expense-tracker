@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select';
 import DatePicker from '@/components/ui/DatePicker';
 import { Button } from '@/components/ui/button';
+import { useAlertDialog } from '@/contexts/AlertDialogContext';
 import type {
   ExpenseFormData,
   ExpenseCategory,
@@ -36,6 +37,7 @@ interface ExpenseFormProps {
     mode: 'create' | 'edit',
     expenseId?: number
   ) => Promise<void>;
+  onDelete?: (expenseId: number) => Promise<void>;
 }
 
 export default function ExpenseForm({
@@ -43,15 +45,33 @@ export default function ExpenseForm({
   mode,
   expenseId,
   onSubmit,
+  onDelete,
 }: ExpenseFormProps) {
   const [formData, setFormData] = useState<ExpenseFormData>(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { openAlertDialog } = useAlertDialog();
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     await onSubmit(formData, mode, expenseId);
     setIsSubmitting(false);
+  };
+
+  const handleDeleteClick = () => {
+    if (!expenseId || !onDelete) return;
+
+    openAlertDialog({
+      title: 'Are you sure?',
+      description:
+        'This action cannot be undone. This will permanently delete this expense from your records.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      variant: 'destructive',
+      onConfirm: async () => {
+        await onDelete(expenseId);
+      },
+    });
   };
 
   return (
@@ -188,6 +208,7 @@ export default function ExpenseForm({
           form="expense-form"
           variant="outline"
           disabled={isSubmitting}
+          className="cursor-pointer"
         >
           {isSubmitting
             ? mode === 'create'
@@ -197,6 +218,17 @@ export default function ExpenseForm({
             ? 'Add Expense'
             : 'Update Expense'}
         </Button>
+        {mode === 'edit' && onDelete && (
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={handleDeleteClick}
+            disabled={isSubmitting}
+            className="cursor-pointer"
+          >
+            Delete Expense
+          </Button>
+        )}
       </div>
     </>
   );

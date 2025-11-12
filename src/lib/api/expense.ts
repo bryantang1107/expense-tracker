@@ -25,6 +25,22 @@ export async function submitExpense(
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to ${mode} expense`);
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage =
+      errorData.error || `Failed to ${mode} expense. Please try again.`;
+    throw new Error(errorMessage);
+  }
+}
+
+export async function deleteExpense(expenseId: number): Promise<void> {
+  const response = await fetch(`/api/expenses/${expenseId}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage =
+      errorData.error || 'Failed to delete expense. Please try again.';
+    throw new Error(errorMessage);
   }
 }

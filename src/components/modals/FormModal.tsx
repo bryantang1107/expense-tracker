@@ -16,13 +16,16 @@ const sizeClasses = {
   xl: 'sm:max-w-[800px]',
 };
 
-export default function Modal() {
+export default function FormModal() {
   const { isOpen, closeModal, modalContent, modalOptions } = useModal();
   const { title, description, size = 'md' } = modalOptions;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
-      <DialogContent className={sizeClasses[size]}>
+      <DialogContent
+        className={sizeClasses[size]}
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         {(title || description) && (
           <DialogHeader>
             {title && <DialogTitle>{title}</DialogTitle>}

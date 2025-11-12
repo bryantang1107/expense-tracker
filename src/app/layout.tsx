@@ -2,7 +2,10 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Sidebar from '@/components/layout/Sidebar';
 import { ModalProvider } from '@/contexts/ModalContext';
-import Modal from '@/components/modals/Modal';
+import { AlertDialogProvider } from '@/contexts/AlertDialogContext';
+import FormModal from '@/components/modals/FormModal';
+import AlertDialog from '@/components/modals/AlertDialog';
+import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
 const geistSans = Geist({
@@ -31,13 +34,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ModalProvider>
-          <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
-            <div className="mx-auto flex w-full gap-0">
-              <Sidebar />
-              <main className="flex-1 px-6 py-8">{children}</main>
+          <AlertDialogProvider>
+            <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
+              <div className="mx-auto flex w-full gap-0">
+                <Sidebar />
+                <main className="flex-1 px-6 py-8">{children}</main>
+              </div>
             </div>
-          </div>
-          <Modal />
+            <FormModal />
+            <AlertDialog />
+            <Toaster />
+          </AlertDialogProvider>
         </ModalProvider>
       </body>
     </html>

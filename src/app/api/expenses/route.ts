@@ -25,8 +25,15 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json({ expense }, { status: 201 });
+    return NextResponse.json(
+      {
+        data: expense,
+        message: 'Expense created successfully',
+      },
+      { status: 201 }
+    );
   } catch (error) {
+    console.error('Error creating expense:', error);
     return NextResponse.json(
       { error: 'Failed to create expense' },
       { status: 500 }
