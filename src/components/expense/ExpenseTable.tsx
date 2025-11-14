@@ -5,6 +5,8 @@ import {
   BanknotesIcon,
   DocumentTextIcon,
   CreditCardIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
 import type { ExpenseData } from '@/types/expense';
@@ -13,16 +15,38 @@ import ExpenseForm from './ExpenseForm';
 import { useModal } from '@/contexts/ModalContext';
 import { useCallback } from 'react';
 import type { ExpenseFormData } from '@/types/expense';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { submitExpense, deleteExpense } from '@/lib/api/expense';
+import { Button } from '@/components/ui/button';
 
 interface ExpenseTableProps {
   expenses: ExpenseData[];
+  currentPage?: number;
+  totalPages?: number;
+  totalCount?: number;
+  itemsPerPage?: number;
 }
 
-export default function ExpenseTable({ expenses }: ExpenseTableProps) {
+export default function ExpenseTable({
+  expenses,
+  currentPage = 1,
+  totalPages = 1,
+  totalCount = 0,
+  itemsPerPage = 10,
+}: ExpenseTableProps) {
+  const pathname = usePathname();
   const { openModal, closeModal } = useModal();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handlePageChangeInternal = useCallback(
+    (newPage: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', newPage.toString());
+      router.push(`${pathname}?${params.toString()}`);
+    },
+    [router]
+  );
 
   const handleSubmit = useCallback(
     async (
@@ -179,6 +203,66 @@ export default function ExpenseTable({ expenses }: ExpenseTableProps) {
           </tbody>
         </table>
       </div>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
+          <div className="text-sm text-zinc-600 dark:text-zinc-400">
+            Showing {(currentPage - 1) * itemsPerPage + 1} to{' '}
+            {Math.min(currentPage * itemsPerPage, totalCount)} of {totalCount}{' '}
+            expenses
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChangeInternal(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="cursor-pointer"
+            >
+              <ChevronLeftIcon className="h-4 w-4" />
+              Previous
+            </Button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((page) => {
+                  return (
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  );
+                })
+                .map((page, index, array) => {
+                  const showEllipsisBefore =
+                    index > 0 && page - array[index - 1] > 1;
+                  return (
+                    <div key={page} className="flex items-center gap-1">
+                      {showEllipsisBefore && (
+                        <span className="px-2 text-zinc-500">...</span>
+                      )}
+                      <Button
+                        variant={currentPage === page ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handlePageChangeInternal(page)}
+                        className="cursor-pointer min-w-10"
+                      >
+                        {page}
+                      </Button>
+                    </div>
+                  );
+                })}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handlePageChangeInternal(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="cursor-pointer"
+            >
+              Next
+              <ChevronRightIcon className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

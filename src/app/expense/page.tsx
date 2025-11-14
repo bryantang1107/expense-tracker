@@ -19,12 +19,14 @@ interface ExpensePageProps {
     title?: string;
     category?: string;
     date?: string;
+    page?: string;
+    pageSize?: string;
   }>;
 }
 
 async function ExpenseTableContent({ searchParams }: ExpensePageProps) {
   const params = await searchParams;
-  const { title, category, date } = params;
+  const { title, category, date, page = '1', pageSize = '10' } = params;
 
   const where: Prisma.ExpenseWhereInput = {};
 
@@ -47,11 +49,18 @@ async function ExpenseTableContent({ searchParams }: ExpensePageProps) {
     };
   }
 
+  const itemsPerPage: number = parseInt(pageSize, 10);
+  const currentPage: number = parseInt(page, 10);
+  const totalCount = await prisma.expense.count({ where });
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
   const expenses: PrismaExpense[] = await prisma.expense.findMany({
     where,
     orderBy: {
       createdAt: 'desc',
     },
+    skip: (currentPage - 1) * itemsPerPage,
+    take: itemsPerPage,
   });
 
   const formattedExpense: ExpenseData[] = expenses.map((expense) => ({
@@ -73,7 +82,15 @@ async function ExpenseTableContent({ searchParams }: ExpensePageProps) {
     rawDate: new Date(expense.date),
   }));
 
-  return <ExpenseTable expenses={formattedExpense} />;
+  return (
+    <ExpenseTable
+      expenses={formattedExpense}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      totalCount={totalCount}
+      itemsPerPage={itemsPerPage}
+    />
+  );
 }
 
 export default async function ExpensePage({ searchParams }: ExpensePageProps) {

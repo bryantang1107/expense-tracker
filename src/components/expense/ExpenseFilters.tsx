@@ -36,7 +36,7 @@ export default function ExpenseFilters() {
     }
 
     router.push(`${pathname}?${params.toString()}`);
-  }, [debouncedTitle, pathname, searchParams, router]);
+  }, [debouncedTitle, pathname, router]);
 
   const updateFilter = (key: string, value: string | undefined) => {
     const params = new URLSearchParams(searchParams.toString());
