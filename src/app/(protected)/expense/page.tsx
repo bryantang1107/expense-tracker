@@ -12,7 +12,7 @@ import {
   getPaymentMethodLabel,
   getPaymentMethodIcon,
 } from '@/types/expense';
-import type { Prisma } from '../../../generated/prisma/client';
+import type { Prisma } from '../../../../generated/prisma/client';
 
 interface ExpensePageProps {
   searchParams: Promise<{

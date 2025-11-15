@@ -1,11 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import Sidebar from '@/components/layout/Sidebar';
-import { ModalProvider } from '@/contexts/ModalContext';
-import { AlertDialogProvider } from '@/contexts/AlertDialogContext';
-import FormModal from '@/components/modals/FormModal';
-import AlertDialog from '@/components/modals/AlertDialog';
-import { Toaster } from '@/components/ui/sonner';
+import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
 
 const geistSans = Geist({
@@ -32,24 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ModalProvider>
-          <AlertDialogProvider>
-            <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
-              <div className="mx-auto flex w-full gap-0">
-                <Sidebar />
-                <main className="flex-1 px-6 py-8">{children}</main>
-              </div>
-            </div>
-            <FormModal />
-            <AlertDialog />
-            <Toaster />
-          </AlertDialogProvider>
-        </ModalProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
