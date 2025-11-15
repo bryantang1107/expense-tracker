@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   Squares2X2Icon,
   CurrencyDollarIcon,
@@ -21,8 +23,17 @@ export default function Sidebar() {
       >
         <div className="flex items-center justify-between px-3 mt-8">
           {!collapsed && (
-            <div className="text-sm font-semibold whitespace-nowrap transition-[opacity,width] duration-200">
-              Expense Tracker
+            <div className="flex items-center gap-2">
+              <Image
+                src="/icons/logo.png"
+                alt="GoExpense"
+                width={24}
+                height={24}
+                className="rounded-full object-cover"
+              />
+              <div className="text-sm font-semibold whitespace-nowrap transition-[opacity,width] duration-200">
+                GoExpense
+              </div>
             </div>
           )}
           <button
@@ -68,10 +79,17 @@ function SidebarItem({
   icon: React.ComponentType<{ className?: string }>;
   collapsed: boolean;
 }) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:hover:text-white"
+      className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+        isActive
+          ? 'bg-[#203A43]/10 text-[#203A43] font-bold dark:bg-[#203A43]/20 dark:text-[#4f818d]'
+          : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:hover:text-white'
+      }`}
     >
       <Icon className="h-5 w-5 shrink-0" />
       <span className={collapsed ? 'sr-only' : ''}>{label}</span>

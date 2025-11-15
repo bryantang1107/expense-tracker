@@ -48,7 +48,7 @@ export default function DatePicker({
             variant="outline"
             id="date"
             name="date"
-            className="w-full justify-between font-normal text-white"
+            className="w-full justify-between font-normal text-white bg-transparent"
             type="button"
           >
             {date ? date.toLocaleDateString() : 'Select date'}

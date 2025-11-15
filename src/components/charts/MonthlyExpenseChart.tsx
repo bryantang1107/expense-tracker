@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-} from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 const data = [
   { name: 'Jan', expense: 1240 },
@@ -28,15 +20,17 @@ const data = [
 export default function MonthlyExpenseChart() {
   return (
     <div style={{ width: '100%', height: 300 }}>
-      <ResponsiveContainer>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="expense" fill="#203A43" />
-        </BarChart>
-      </ResponsiveContainer>
+      <BarChart
+        data={data}
+        style={{ width: '100%', height: '100%' }}
+        responsive
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Bar dataKey="expense" fill="#203A43" />
+      </BarChart>
     </div>
   );
 }

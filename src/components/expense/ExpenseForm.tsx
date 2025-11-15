@@ -79,7 +79,7 @@ export default function ExpenseForm({
       <form
         onSubmit={handleFormSubmit}
         id="expense-form"
-        className="flex flex-col gap-4 text-white"
+        className="flex flex-col gap-4 text-white mt-5"
       >
         <Field>
           <FieldLabel htmlFor="title" className="text-white">
@@ -221,7 +221,7 @@ export default function ExpenseForm({
           form="expense-form"
           variant="outline"
           disabled={isSubmitting}
-          className="cursor-pointer text-white"
+          className="cursor-pointer text-white bg-transparent"
         >
           {isSubmitting
             ? mode === 'create'

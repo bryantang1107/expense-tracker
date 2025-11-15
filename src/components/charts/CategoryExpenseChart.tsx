@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 const data = [
   { name: 'Housing / Rent / Mortgage', value: 1200 },
@@ -48,32 +41,30 @@ const COLORS = [
 export default function CategoryExpenseChart() {
   return (
     <div style={{ width: '100%', height: '400px' }}>
-      <ResponsiveContainer>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            nameKey="name"
-            cx="35%"
-            cy="50%"
-            innerRadius={60} // makes it a donut
-            outerRadius={100}
-            fill="#8884d8"
-            paddingAngle={4}
-          >
-            {data.map((_, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend
-            verticalAlign="middle"
-            align="right"
-            layout="vertical"
-            wrapperStyle={{ paddingLeft: '20px' }}
-          />
-        </PieChart>
-      </ResponsiveContainer>
+      <PieChart style={{ width: '100%', height: '100%' }} responsive>
+        <Pie
+          data={data}
+          dataKey="value"
+          nameKey="name"
+          cx="35%"
+          cy="50%"
+          innerRadius={60} // makes it a donut
+          outerRadius={100}
+          fill="#8884d8"
+          paddingAngle={4}
+        >
+          {data.map((_, index) => (
+            <Cell key={index} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend
+          verticalAlign="middle"
+          align="right"
+          layout="vertical"
+          wrapperStyle={{ paddingLeft: '20px' }}
+        />
+      </PieChart>
     </div>
   );
 }

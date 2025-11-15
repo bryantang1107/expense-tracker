@@ -7,7 +7,6 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  ResponsiveContainer,
 } from 'recharts';
 
 const data = [
@@ -28,22 +27,24 @@ const data = [
 export default function MonthlyExpenseLineChart() {
   return (
     <div style={{ width: '100%', height: 300 }}>
-      <ResponsiveContainer>
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
-          <Line
-            type="monotone"
-            dataKey="amount"
-            stroke="#203A43"
-            strokeWidth={3}
-            dot={true}
-            activeDot={{ r: 6 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <LineChart
+        data={data}
+        style={{ width: '100%', height: '100%' }}
+        responsive
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="month" />
+        <YAxis />
+        <Tooltip />
+        <Line
+          type="monotone"
+          dataKey="amount"
+          stroke="#203A43"
+          strokeWidth={3}
+          dot={true}
+          activeDot={{ r: 6 }}
+        />
+      </LineChart>
     </div>
   );
 }
