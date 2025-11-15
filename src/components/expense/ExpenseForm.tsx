@@ -79,10 +79,12 @@ export default function ExpenseForm({
       <form
         onSubmit={handleFormSubmit}
         id="expense-form"
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 text-white"
       >
         <Field>
-          <FieldLabel htmlFor="title">Title</FieldLabel>
+          <FieldLabel htmlFor="title" className="text-white">
+            Title
+          </FieldLabel>
           <Input
             id="title"
             name="title"
@@ -92,10 +94,13 @@ export default function ExpenseForm({
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
+            className="text-white placeholder:text-white/70"
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor="description">Description</FieldLabel>
+          <FieldLabel htmlFor="description" className="text-white">
+            Description
+          </FieldLabel>
           <Textarea
             id="description"
             name="description"
@@ -105,13 +110,16 @@ export default function ExpenseForm({
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
+            className="text-white placeholder:text-white/70"
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor="amount">Amount</FieldLabel>
+          <FieldLabel htmlFor="amount" className="text-white">
+            Amount
+          </FieldLabel>
           <InputGroup>
             <InputGroupAddon>
-              <InputGroupText>RM</InputGroupText>
+              <InputGroupText className="text-white">RM</InputGroupText>
             </InputGroupAddon>
             <InputGroupInput
               id="amount"
@@ -128,11 +136,14 @@ export default function ExpenseForm({
                   amount: parseFloat(e.target.value) || 0,
                 })
               }
+              className="text-white placeholder:text-white/70"
             />
           </InputGroup>
         </Field>
         <Field>
-          <FieldLabel htmlFor="category">Category</FieldLabel>
+          <FieldLabel htmlFor="category" className="text-white">
+            Category
+          </FieldLabel>
           <Select
             name="category"
             value={formData.category || ''}
@@ -143,7 +154,7 @@ export default function ExpenseForm({
               })
             }
           >
-            <SelectTrigger id="category">
+            <SelectTrigger id="category" className="text-white">
               <SelectValue placeholder="Choose category" />
             </SelectTrigger>
             <SelectContent>
@@ -162,7 +173,9 @@ export default function ExpenseForm({
           </Select>
         </Field>
         <Field>
-          <FieldLabel htmlFor="paymentMethod">Payment Method</FieldLabel>
+          <FieldLabel htmlFor="paymentMethod" className="text-white">
+            Payment Method
+          </FieldLabel>
           <Select
             name="paymentMethod"
             value={formData.paymentMethod || ''}
@@ -173,7 +186,7 @@ export default function ExpenseForm({
               })
             }
           >
-            <SelectTrigger id="paymentMethod">
+            <SelectTrigger id="paymentMethod" className="text-white">
               <SelectValue placeholder="Choose payment method" />
             </SelectTrigger>
             <SelectContent>
@@ -208,7 +221,7 @@ export default function ExpenseForm({
           form="expense-form"
           variant="outline"
           disabled={isSubmitting}
-          className="cursor-pointer"
+          className="cursor-pointer text-white"
         >
           {isSubmitting
             ? mode === 'create'
@@ -224,7 +237,7 @@ export default function ExpenseForm({
             variant="destructive"
             onClick={handleDeleteClick}
             disabled={isSubmitting}
-            className="cursor-pointer"
+            className="cursor-pointer text-white"
           >
             Delete Expense
           </Button>
