@@ -95,7 +95,7 @@ async function ExpenseTableContent({ searchParams }: ExpensePageProps) {
 
 export default async function ExpensePage({ searchParams }: ExpensePageProps) {
   return (
-    <div className="min-h-screen bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="min-h-screen bg-background px-6 py-10">
       <ExpenseHeader />
       <ExpenseFilters />
       <Suspense fallback={<ExpenseTableSkeleton />}>

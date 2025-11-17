@@ -38,24 +38,12 @@ export default function ExpenseFilters() {
     router.push(`${pathname}?${params.toString()}`);
   }, [debouncedTitle, pathname, router]);
 
-  const updateFilter = (key: string, value: string | undefined) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (value) {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
-
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitleValue(e.target.value);
+    router.push(`${pathname}?title=${e.target.value}&page=1`);
   };
 
   const handleCategoryChange = (value: string) => {
-    updateFilter('category', value || undefined);
+    router.push(`${pathname}?category=${value}&page=1`);
   };
 
   const handleDateChange = (date: Date | undefined) => {
@@ -63,9 +51,8 @@ export default function ExpenseFilters() {
       const dateStr = `${date.getFullYear()}-${String(
         date.getMonth() + 1
       ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-      updateFilter('date', dateStr);
+      router.push(`${pathname}?date=${dateStr}&page=1`);
     } else {
-      updateFilter('date', undefined);
     }
   };
 
@@ -79,8 +66,7 @@ export default function ExpenseFilters() {
     searchParams.get('date');
 
   const clearFilters = () => {
-    setTitleValue('');
-    router.push(pathname);
+    router.push(`${pathname}?page=1`);
   };
 
   return (

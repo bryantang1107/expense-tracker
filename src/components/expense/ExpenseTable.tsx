@@ -121,11 +121,11 @@ export default function ExpenseTable({
   };
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <section className="rounded-lg border border-border bg-card">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[800px] text-left">
-          <thead className="text-xs uppercase text-zinc-500">
-            <tr className="border-b border-zinc-200 dark:border-zinc-800">
+          <thead className="text-xs uppercase text-muted-foreground">
+            <tr className="border-b border-border">
               <th className="px-4 py-3">
                 <div className="flex items-center gap-1.5">
                   <CalendarIcon className="h-3.5 w-3.5" />
@@ -148,15 +148,15 @@ export default function ExpenseTable({
               </th>
             </tr>
           </thead>
-          <tbody className="text-sm text-zinc-900 dark:text-zinc-100">
+          <tbody className="text-sm text-foreground">
             {expenses.length === 0 ? (
               <tr>
                 <td
                   colSpan={5}
-                  className="px-4 py-12 text-center text-zinc-500 dark:text-zinc-400"
+                  className="px-4 py-12 text-center text-muted-foreground"
                 >
                   <div className="flex flex-col items-center gap-2">
-                    <DocumentTextIcon className="h-8 w-8 text-zinc-400" />
+                    <DocumentTextIcon className="h-8 w-8 text-muted-foreground" />
                     <p>
                       No expenses found. Add your first expense to get started!
                     </p>
@@ -168,9 +168,9 @@ export default function ExpenseTable({
                 <tr
                   key={expense.id}
                   onClick={() => openEditModal(expense)}
-                  className="border-b border-zinc-100 last:border-0 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800 cursor-pointer transition-colors"
+                  className="border-b border-border last:border-0 hover:bg-accent cursor-pointer transition-colors"
                 >
-                  <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="px-4 py-3 text-muted-foreground">
                     {expense.date}
                   </td>
                   <td className="px-4 py-3">{expense.title}</td>
@@ -184,7 +184,7 @@ export default function ExpenseTable({
                       <span>{expense.category.label}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="px-4 py-3 text-muted-foreground">
                     <div className="flex items-center gap-2">
                       {expense.paymentMethod.iconString && (
                         <img
@@ -204,8 +204,8 @@ export default function ExpenseTable({
         </table>
       </div>
       {totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
-          <div className="text-sm text-zinc-600 dark:text-zinc-400">
+        <div className="flex items-center justify-between border-t border-border px-4 py-3">
+          <div className="text-sm text-muted-foreground">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{' '}
             {Math.min(currentPage * itemsPerPage, totalCount)} of {totalCount}{' '}
             expenses
@@ -236,7 +236,7 @@ export default function ExpenseTable({
                   return (
                     <div key={page} className="flex items-center gap-1">
                       {showEllipsisBefore && (
-                        <span className="px-2 text-zinc-500">...</span>
+                        <span className="px-2 text-muted-foreground">...</span>
                       )}
                       <Button
                         variant={currentPage === page ? 'default' : 'outline'}

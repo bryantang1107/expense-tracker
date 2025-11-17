@@ -62,16 +62,16 @@ export default function ExpenseHeader() {
   return (
     <header className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Expenses
         </h1>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-1 text-sm text-muted-foreground">
           Track and review your spending
         </p>
       </div>
       <button
         onClick={openCreateModal}
-        className="flex items-center gap-2 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm font-medium text-zinc-900 shadow-sm hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+        className="flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-accent cursor-pointer"
       >
         <PlusIcon className="h-4 w-4" />
         Add Expense

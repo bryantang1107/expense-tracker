@@ -5,6 +5,7 @@ import FormModal from '@/components/modals/FormModal';
 import AlertDialog from '@/components/modals/AlertDialog';
 import { Toaster } from '@/components/ui/sonner';
 import { UserButton } from '@clerk/nextjs';
+import { ThemeButton } from '@/components/ThemeButton';
 
 export default function AppLayout({
   children,
@@ -15,12 +16,15 @@ export default function AppLayout({
     <ModalProvider>
       <AlertDialogProvider>
         <header className="flex justify-end items-center p-4 gap-4 h-16 fixed top-0 right-0 z-50">
+          <ThemeButton />
           <UserButton />
         </header>
-        <div className="min-h-screen bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100">
+        <div className="min-h-screen bg-background text-foreground">
           <div className="mx-auto flex w-full gap-0">
             <Sidebar />
-            <main className="flex-1 px-6 py-8 pt-24">{children}</main>
+            <main className="flex-1 px-6 py-8 ml-10 transition-all duration-300">
+              {children}
+            </main>
           </div>
         </div>
         <FormModal />
@@ -30,4 +34,3 @@ export default function AppLayout({
     </ModalProvider>
   );
 }
-

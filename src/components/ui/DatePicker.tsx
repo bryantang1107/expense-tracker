@@ -39,7 +39,7 @@ export default function DatePicker({
 
   return (
     <div className="flex flex-col gap-4">
-      <Label htmlFor="date" className="px-1 text-white">
+      <Label htmlFor="date" className="px-1">
         Date
       </Label>
       <Popover open={open} onOpenChange={setOpen}>
@@ -48,7 +48,7 @@ export default function DatePicker({
             variant="outline"
             id="date"
             name="date"
-            className="w-full justify-between font-normal text-white bg-transparent"
+            className="w-full justify-between font-normal bg-transparent"
             type="button"
           >
             {date ? date.toLocaleDateString() : 'Select date'}

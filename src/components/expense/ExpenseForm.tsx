@@ -79,12 +79,10 @@ export default function ExpenseForm({
       <form
         onSubmit={handleFormSubmit}
         id="expense-form"
-        className="flex flex-col gap-4 text-white mt-5"
+        className="flex flex-col gap-4 mt-5"
       >
         <Field>
-          <FieldLabel htmlFor="title" className="text-white">
-            Title
-          </FieldLabel>
+          <FieldLabel htmlFor="title">Title</FieldLabel>
           <Input
             id="title"
             name="title"
@@ -94,13 +92,10 @@ export default function ExpenseForm({
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            className="text-white placeholder:text-white/70"
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor="description" className="text-white">
-            Description
-          </FieldLabel>
+          <FieldLabel htmlFor="description">Description</FieldLabel>
           <Textarea
             id="description"
             name="description"
@@ -110,16 +105,13 @@ export default function ExpenseForm({
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-            className="text-white placeholder:text-white/70"
           />
         </Field>
         <Field>
-          <FieldLabel htmlFor="amount" className="text-white">
-            Amount
-          </FieldLabel>
+          <FieldLabel htmlFor="amount">Amount</FieldLabel>
           <InputGroup>
             <InputGroupAddon>
-              <InputGroupText className="text-white">RM</InputGroupText>
+              <InputGroupText>RM</InputGroupText>
             </InputGroupAddon>
             <InputGroupInput
               id="amount"
@@ -136,14 +128,11 @@ export default function ExpenseForm({
                   amount: parseFloat(e.target.value) || 0,
                 })
               }
-              className="text-white placeholder:text-white/70"
             />
           </InputGroup>
         </Field>
         <Field>
-          <FieldLabel htmlFor="category" className="text-white">
-            Category
-          </FieldLabel>
+          <FieldLabel htmlFor="category">Category</FieldLabel>
           <Select
             name="category"
             value={formData.category || ''}
@@ -154,7 +143,7 @@ export default function ExpenseForm({
               })
             }
           >
-            <SelectTrigger id="category" className="text-white">
+            <SelectTrigger id="category">
               <SelectValue placeholder="Choose category" />
             </SelectTrigger>
             <SelectContent>
@@ -173,9 +162,7 @@ export default function ExpenseForm({
           </Select>
         </Field>
         <Field>
-          <FieldLabel htmlFor="paymentMethod" className="text-white">
-            Payment Method
-          </FieldLabel>
+          <FieldLabel htmlFor="paymentMethod">Payment Method</FieldLabel>
           <Select
             name="paymentMethod"
             value={formData.paymentMethod || ''}
@@ -186,7 +173,7 @@ export default function ExpenseForm({
               })
             }
           >
-            <SelectTrigger id="paymentMethod" className="text-white">
+            <SelectTrigger id="paymentMethod">
               <SelectValue placeholder="Choose payment method" />
             </SelectTrigger>
             <SelectContent>
@@ -221,7 +208,7 @@ export default function ExpenseForm({
           form="expense-form"
           variant="outline"
           disabled={isSubmitting}
-          className="cursor-pointer text-white bg-transparent"
+          className="cursor-pointer bg-transparent"
         >
           {isSubmitting
             ? mode === 'create'
@@ -237,7 +224,7 @@ export default function ExpenseForm({
             variant="destructive"
             onClick={handleDeleteClick}
             disabled={isSubmitting}
-            className="cursor-pointer text-white"
+            className="cursor-pointer"
           >
             Delete Expense
           </Button>

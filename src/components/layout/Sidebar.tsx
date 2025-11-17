@@ -17,7 +17,7 @@ export default function Sidebar() {
   return (
     <>
       <aside
-        className={`h-screen overflow-hidden border-r border-zinc-200 bg-white transition-all duration-300 dark:border-zinc-800 dark:bg-zinc-900 flex flex-col ${
+        className={`fixed left-0 top-0 h-screen overflow-hidden border-r border-border bg-card transition-all duration-300 flex flex-col z-50 ${
           collapsed ? 'w-16 min-w-16 items-center' : 'w-64 min-w-[200px]'
         }`}
       >
@@ -31,14 +31,14 @@ export default function Sidebar() {
                 height={24}
                 className="rounded-full object-cover"
               />
-              <div className="text-sm font-semibold whitespace-nowrap transition-[opacity,width] duration-200">
+              <div className="text-sm font-semibold whitespace-nowrap transition-[opacity,width] duration-200 text-foreground">
                 GoExpense
               </div>
             </div>
           )}
           <button
             aria-label="Toggle sidebar"
-            className="h-8 w-8 flex items-center justify-center rounded-md border border-zinc-200 text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-800"
+            className="h-8 w-8 flex items-center justify-center rounded-md border border-border text-foreground hover:bg-accent"
             onClick={() => setCollapsed((v) => !v)}
           >
             {collapsed ? (
@@ -55,12 +55,14 @@ export default function Sidebar() {
             label="Overview"
             icon={Squares2X2Icon}
             collapsed={collapsed}
+            onNavigate={() => setCollapsed(true)}
           />
           <SidebarItem
             href="/expense"
             label="Expenses"
             icon={CurrencyDollarIcon}
             collapsed={collapsed}
+            onNavigate={() => setCollapsed(true)}
           />
         </nav>
       </aside>
@@ -73,11 +75,13 @@ function SidebarItem({
   label,
   icon: Icon,
   collapsed,
+  onNavigate,
 }: {
   href: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   collapsed: boolean;
+  onNavigate: () => void;
 }) {
   const pathname = usePathname();
   const isActive = pathname === href;
@@ -85,10 +89,11 @@ function SidebarItem({
   return (
     <Link
       href={href}
+      onClick={onNavigate}
       className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
         isActive
-          ? 'bg-[#203A43]/10 text-[#203A43] font-bold dark:bg-[#203A43]/20 dark:text-[#4f818d]'
-          : 'text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:hover:text-white'
+          ? 'bg-accent text-accent-foreground font-bold'
+          : 'text-foreground hover:bg-accent hover:text-accent-foreground'
       }`}
     >
       <Icon className="h-5 w-5 shrink-0" />
