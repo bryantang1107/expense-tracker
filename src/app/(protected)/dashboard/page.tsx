@@ -68,26 +68,12 @@ export default function DashboardPage() {
         </section>
 
         <section className="mt-8">
-          <div className="flex gap-4">
-            <div className="w-1/2 gap-4 rounded-lg border border-border bg-card">
-              <div className="p-6">
-                <h2 className="text-base font-semibold text-foreground">
-                  Expenses by Category
-                </h2>
-              </div>
-              <div className="px-10">
-                <CategoryExpenseChart />
-              </div>
+          <div className="flex gap-4 h-[500px]">
+            <div className="w-1/2 gap-4 h-full">
+              <CategoryExpenseChart />
             </div>
-            <div className="w-1/2 gap-4 rounded-lg border border-border bg-card">
-              <div className="p-6">
-                <h2 className="text-base font-semibold text-foreground">
-                  Expenses by Category
-                </h2>
-              </div>
-              <div className="px-10">
-                <MonthlyExpenseLineChart />
-              </div>
+            <div className="w-1/2 gap-4 h-full">
+              <MonthlyExpenseLineChart />
             </div>
           </div>
         </section>

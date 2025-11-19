@@ -1,36 +1,77 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { TrendingUp } from 'lucide-react';
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-const data = [
-  { name: 'Jan', expense: 1240 },
-  { name: 'Feb', expense: 980 },
-  { name: 'Mar', expense: 1560 },
-  { name: 'Apr', expense: 1120 },
-  { name: 'May', expense: 1890 },
-  { name: 'Jun', expense: 1450 },
-  { name: 'Jul', expense: 1680 },
-  { name: 'Aug', expense: 1320 },
-  { name: 'Sep', expense: 1750 },
-  { name: 'Oct', expense: 1420 },
-  { name: 'Nov', expense: 1980 },
-  { name: 'Dec', expense: 2100 },
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
+
+export const description = 'A bar chart';
+
+const chartData = [
+  { month: 'January', desktop: 186 },
+  { month: 'February', desktop: 305 },
+  { month: 'March', desktop: 237 },
+  { month: 'April', desktop: 73 },
+  { month: 'May', desktop: 209 },
+  { month: 'June', desktop: 214 },
 ];
 
-export default function MonthlyExpenseChart() {
+const chartConfig = {
+  desktop: {
+    label: 'Desktop',
+    color: 'var(--chart-1)',
+  },
+} satisfies ChartConfig;
+
+const MonthlyExpenseChart = () => {
   return (
-    <div style={{ width: '100%', height: 300 }}>
-      <BarChart
-        data={data}
-        style={{ width: '100%', height: '100%' }}
-        responsive
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Bar dataKey="expense" fill="#203A43" />
-      </BarChart>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Bar Chart</CardTitle>
+        <CardDescription>January - June 2024</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <BarChart accessibilityLayer data={chartData}>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="flex gap-2 leading-none font-medium">
+          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+        </div>
+        <div className="text-muted-foreground leading-none">
+          Showing total visitors for the last 6 months
+        </div>
+      </CardFooter>
+    </Card>
   );
-}
+};
+
+export default MonthlyExpenseChart;

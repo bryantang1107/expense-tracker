@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   return (
     <>
