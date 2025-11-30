@@ -18,6 +18,7 @@ import type { ExpenseFormData } from '@/types/expense';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { submitExpense, deleteExpense } from '@/lib/api/expense';
 import { Button } from '@/components/ui/button';
+import { formatCurrency } from '@/lib/formatter';
 
 interface ExpenseTableProps {
   expenses: ExpenseData[];
@@ -117,7 +118,7 @@ export default function ExpenseTable({
     [openModal, handleSubmit, handleDelete]
   );
   const formatAmount = (amount: number) => {
-    return `-RM${amount.toFixed(2)}`;
+    return `-${formatCurrency(amount)}`;
   };
 
   return (

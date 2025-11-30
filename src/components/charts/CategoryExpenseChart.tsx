@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { format } from 'date-fns';
+import { ChartPieIcon } from '@heroicons/react/24/outline';
 import { Label, Pie, PieChart, Sector } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
@@ -25,128 +27,124 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { formatAmountWithSymbol, formatCurrency } from '@/lib/formatter';
 
-export const description =
-  'An interactive pie chart showing expenses by category';
+interface CategoryExpenseChartProps {
+  data: Record<string, Array<{ category: string; amount: number }>>;
+}
 
 // Color mapper for categories
 const getCategoryColor = (category: string): string => {
   return `var(--color-${category})`;
 };
-
-const monthlyExpenseData: Record<
-  string,
-  Array<{ category: string; amount: number }>
-> = {
-  January: [
-    { category: 'housing', amount: 1200 },
-    { category: 'groceries', amount: 420 },
-    { category: 'transportation', amount: 280 },
-    { category: 'dining', amount: 350 },
-    { category: 'entertainment', amount: 150 },
-  ],
-
-  February: [
-    { category: 'housing', amount: 1200 },
-    { category: 'utilities', amount: 210 },
-    { category: 'groceries', amount: 380 },
-    { category: 'health', amount: 180 },
-    { category: 'gifts', amount: 200 },
-  ],
-
-  March: [
-    { category: 'housing', amount: 1200 },
-    { category: 'transportation', amount: 330 },
-    { category: 'shopping', amount: 450 },
-    { category: 'travel', amount: 150 },
-  ],
-
-  April: [
-    { category: 'housing', amount: 1200 },
-    { category: 'groceries', amount: 400 },
-    { category: 'entertainment', amount: 190 },
-    { category: 'education', amount: 270 },
-    { category: 'travel', amount: 800 },
-  ],
-
-  May: [
-    { category: 'housing', amount: 1200 },
-    { category: 'utilities', amount: 230 },
-    { category: 'groceries', amount: 480 },
-    { category: 'dining', amount: 420 },
-    { category: 'shopping', amount: 300 },
-  ],
-
-  June: [
-    { category: 'housing', amount: 1200 },
-    { category: 'health', amount: 250 },
-    { category: 'transportation', amount: 300 },
-    { category: 'savings', amount: 700 },
-    { category: 'travel', amount: 600 },
-  ],
-
-  July: [
-    { category: 'housing', amount: 1200 },
-    { category: 'groceries', amount: 500 },
-    { category: 'entertainment', amount: 250 },
-    { category: 'gifts', amount: 120 },
-  ],
-
-  August: [
-    { category: 'housing', amount: 1200 },
-    { category: 'utilities', amount: 270 },
-    { category: 'shopping', amount: 360 },
-    { category: 'education', amount: 350 },
-  ],
-
-  September: [
-    { category: 'housing', amount: 1200 },
-    { category: 'groceries', amount: 440 },
-    { category: 'transportation', amount: 310 },
-    { category: 'dining', amount: 370 },
-  ],
-
-  October: [
-    { category: 'housing', amount: 1200 },
-    { category: 'entertainment', amount: 260 },
-    { category: 'shopping', amount: 420 },
-    { category: 'travel', amount: 180 },
-    { category: 'other', amount: 120 },
-  ],
-
-  November: [
-    { category: 'housing', amount: 1200 },
-    { category: 'utilities', amount: 250 },
-    { category: 'groceries', amount: 480 },
-    { category: 'gifts', amount: 250 },
-  ],
-
-  December: [
-    { category: 'housing', amount: 1200 },
-    { category: 'shopping', amount: 650 },
-    { category: 'dining', amount: 450 },
-    { category: 'travel', amount: 500 },
-    { category: 'gifts', amount: 400 },
-  ],
-};
 const chartConfig = {
   amount: { label: 'Amount' },
 
-  housing: { label: 'Housing', color: '#264653' },
-  utilities: { label: 'Utilities', color: '#1B3A4B' },
-  groceries: { label: 'Groceries', color: '#2A9D8F' },
-  transportation: { label: 'Transportation', color: '#0F2027' },
-  dining: { label: 'Food & Dining', color: '#205A6D' },
-  shopping: { label: 'Shopping', color: '#2C5364' },
-  entertainment: { label: 'Entertainment', color: '#3A6B7A' },
-  health: { label: 'Health & Fitness', color: '#1E555C' },
-  insurance: { label: 'Insurance', color: '#203A43' },
-  loans: { label: 'Loans', color: '#427A8A' },
-  savings: { label: 'Savings', color: '#3F8E8A' },
-  education: { label: 'Education', color: '#345C72' },
-  travel: { label: 'Travel', color: '#4A7080' },
-  gifts: { label: 'Gifts', color: '#597D89' },
-  other: { label: 'Other', color: '#6A8C98' },
+  housing: {
+    label: 'Housing',
+    theme: {
+      light: 'oklch(0.65 0.15 200)',
+      dark: 'oklch(0.65 0.15 200)',
+    },
+  },
+  utilities: {
+    label: 'Utilities',
+    theme: {
+      light: 'oklch(0.6 0.12 240)',
+      dark: 'oklch(0.6 0.12 240)',
+    },
+  },
+  groceries: {
+    label: 'Groceries',
+    theme: {
+      light: 'oklch(0.7 0.14 180)',
+      dark: 'oklch(0.7 0.14 180)',
+    },
+  },
+  transportation: {
+    label: 'Transportation',
+    theme: {
+      light: 'oklch(0.65 0.15 200)',
+      dark: 'oklch(0.65 0.15 200)',
+    },
+  },
+  dining: {
+    label: 'Food & Dining',
+    theme: {
+      light: 'oklch(0.68 0.13 200)',
+      dark: 'oklch(0.68 0.13 200)',
+    },
+  },
+  shopping: {
+    label: 'Shopping',
+    theme: {
+      light: 'oklch(0.6 0.12 240)',
+      dark: 'oklch(0.6 0.12 240)',
+    },
+  },
+  entertainment: {
+    label: 'Entertainment',
+    theme: {
+      light: 'oklch(0.7 0.14 180)',
+      dark: 'oklch(0.7 0.14 180)',
+    },
+  },
+  health: {
+    label: 'Health & Fitness',
+    theme: {
+      light: 'oklch(0.68 0.15 180)',
+      dark: 'oklch(0.68 0.15 180)',
+    },
+  },
+  insurance: {
+    label: 'Insurance',
+    theme: {
+      light: 'oklch(0.62 0.12 200)',
+      dark: 'oklch(0.62 0.12 200)',
+    },
+  },
+  loans: {
+    label: 'Loans',
+    theme: {
+      light: 'oklch(0.72 0.13 210)',
+      dark: 'oklch(0.72 0.13 210)',
+    },
+  },
+  savings: {
+    label: 'Savings',
+    theme: {
+      light: 'oklch(0.7 0.14 185)',
+      dark: 'oklch(0.7 0.14 185)',
+    },
+  },
+  education: {
+    label: 'Education',
+    theme: {
+      light: 'oklch(0.66 0.12 230)',
+      dark: 'oklch(0.66 0.12 230)',
+    },
+  },
+  travel: {
+    label: 'Travel',
+    theme: {
+      light: 'oklch(0.75 0.13 60)',
+      dark: 'oklch(0.75 0.13 60)',
+    },
+  },
+  gifts: {
+    label: 'Gifts',
+    theme: {
+      light: 'oklch(0.68 0.12 280)',
+      dark: 'oklch(0.68 0.12 280)',
+    },
+  },
+  other: {
+    label: 'Other',
+    theme: {
+      light: 'oklch(0.7 0.11 235)',
+      dark: 'oklch(0.7 0.11 235)',
+    },
+  },
 } satisfies ChartConfig;
 
 const months = [
@@ -164,22 +162,25 @@ const months = [
   'December',
 ];
 
-const CategoryExpenseChart = () => {
+const CategoryExpenseChart = ({ data }: CategoryExpenseChartProps) => {
   const id = 'pie-interactive';
-  const [selectedMonth, setSelectedMonth] = useState('January');
+  const currentMonthName = format(new Date(), 'MMMM');
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthName);
 
   const currentMonthData = useMemo(() => {
-    const data = monthlyExpenseData[selectedMonth] || [];
-    return data.map((item) => ({
+    const monthData = data[selectedMonth] || [];
+    return monthData.map((item) => ({
       ...item,
       fill: getCategoryColor(item.category),
     }));
-  }, [selectedMonth]);
+  }, [selectedMonth, data]);
 
   const totalAmount = useMemo(
     () => currentMonthData.reduce((acc, item) => acc + item.amount, 0),
     [currentMonthData]
   );
+
+  const hasData = currentMonthData.length > 0 && totalAmount > 0;
 
   return (
     <Card data-chart={id} className="flex flex-col h-full">
@@ -187,7 +188,9 @@ const CategoryExpenseChart = () => {
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
           <CardTitle>Expenses by Category</CardTitle>
-          <CardDescription>{selectedMonth} 2024</CardDescription>
+          <CardDescription>
+            {selectedMonth} {new Date().getFullYear()}
+          </CardDescription>
         </div>
         <Select value={selectedMonth} onValueChange={setSelectedMonth}>
           <SelectTrigger
@@ -209,84 +212,99 @@ const CategoryExpenseChart = () => {
           </SelectContent>
         </Select>
       </CardHeader>
-      <CardContent className="flex flex-1 justify-center pb-0">
-        <ChartContainer
-          id={id}
-          config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[300px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  hideLabel
-                  formatter={(value, name) => (
-                    <>
-                      {chartConfig[name as keyof typeof chartConfig]?.label ||
-                        name}
-                      <div className="font-mono font-medium">
-                        <span className="font-medium text-md">
-                          RM {value.toLocaleString()}
-                        </span>
-                      </div>
-                    </>
-                  )}
-                />
-              }
-            />
-            <Pie
-              data={currentMonthData}
-              dataKey="amount"
-              nameKey="category"
-              innerRadius={60}
-              strokeWidth={5}
-              activeShape={({
-                outerRadius = 0,
-                ...props
-              }: PieSectorDataItem) => (
-                <g>
-                  <Sector {...props} outerRadius={outerRadius + 10} />
-                  <Sector
-                    {...props}
-                    outerRadius={outerRadius + 25}
-                    innerRadius={outerRadius + 12}
+      <CardContent className="flex flex-1 justify-center items-center pb-0">
+        {hasData ? (
+          <ChartContainer
+            id={id}
+            config={chartConfig}
+            className="mx-auto aspect-square w-full max-w-[300px]"
+          >
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    hideLabel
+                    formatter={(value, name) => (
+                      <>
+                        {chartConfig[name as keyof typeof chartConfig]?.label ||
+                          name}
+                        <div className="font-mono font-medium">
+                          <span className="font-medium text-md">
+                            {formatCurrency(Number(value))}
+                          </span>
+                        </div>
+                      </>
+                    )}
                   />
-                </g>
-              )}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
+                }
+              />
+              <Pie
+                data={currentMonthData}
+                dataKey="amount"
+                nameKey="category"
+                innerRadius={60}
+                strokeWidth={5}
+                activeShape={({
+                  outerRadius = 0,
+                  ...props
+                }: PieSectorDataItem) => (
+                  <g>
+                    <Sector {...props} outerRadius={outerRadius + 10} />
+                    <Sector
+                      {...props}
+                      outerRadius={outerRadius + 25}
+                      innerRadius={outerRadius + 12}
+                    />
+                  </g>
+                )}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
+                      return (
+                        <text
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-2xl font-bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
                         >
-                          RM{totalAmount.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Total Expenses
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </Pie>
-          </PieChart>
-        </ChartContainer>
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-2xl font-bold p-3"
+                          >
+                            {formatAmountWithSymbol(totalAmount, 0)}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            Total Expenses
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          </ChartContainer>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
+            <ChartPieIcon className="h-12 w-12 text-muted-foreground" />
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-foreground">
+                No expenses found
+              </p>
+              <p className="text-xs text-muted-foreground">
+                No expenses recorded for {selectedMonth}{' '}
+                {new Date().getFullYear()}
+              </p>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

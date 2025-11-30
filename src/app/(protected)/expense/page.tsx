@@ -57,7 +57,7 @@ async function ExpenseTableContent({ searchParams }: ExpensePageProps) {
   const expenses: PrismaExpense[] = await prisma.expense.findMany({
     where,
     orderBy: {
-      createdAt: 'desc',
+      date: 'desc',
     },
     skip: (currentPage - 1) * itemsPerPage,
     take: itemsPerPage,
