@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { revalidateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 import type { ExpenseFormData } from '@/types/expense';
 
@@ -24,6 +26,9 @@ export async function POST(request: Request) {
         date: new Date(date),
       },
     });
+
+    const { userId } = await auth();
+    revalidateTag('expenses', userId!);
 
     return NextResponse.json(
       {

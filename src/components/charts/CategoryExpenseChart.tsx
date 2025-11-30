@@ -37,113 +37,69 @@ interface CategoryExpenseChartProps {
 const getCategoryColor = (category: string): string => {
   return `var(--color-${category})`;
 };
+
 const chartConfig = {
   amount: { label: 'Amount' },
 
   housing: {
     label: 'Housing',
-    theme: {
-      light: 'oklch(0.65 0.15 200)',
-      dark: 'oklch(0.65 0.15 200)',
-    },
+    theme: { light: 'oklch(0.65 0.16 220)', dark: 'oklch(0.65 0.16 220)' },
   },
   utilities: {
     label: 'Utilities',
-    theme: {
-      light: 'oklch(0.6 0.12 240)',
-      dark: 'oklch(0.6 0.12 240)',
-    },
+    theme: { light: 'oklch(0.62 0.14 250)', dark: 'oklch(0.62 0.14 250)' },
   },
   groceries: {
     label: 'Groceries',
-    theme: {
-      light: 'oklch(0.7 0.14 180)',
-      dark: 'oklch(0.7 0.14 180)',
-    },
+    theme: { light: 'oklch(0.68 0.15 160)', dark: 'oklch(0.68 0.15 160)' },
   },
   transportation: {
     label: 'Transportation',
-    theme: {
-      light: 'oklch(0.65 0.15 200)',
-      dark: 'oklch(0.65 0.15 200)',
-    },
+    theme: { light: 'oklch(0.63 0.16 200)', dark: 'oklch(0.63 0.16 200)' },
   },
   dining: {
     label: 'Food & Dining',
-    theme: {
-      light: 'oklch(0.68 0.13 200)',
-      dark: 'oklch(0.68 0.13 200)',
-    },
+    theme: { light: 'oklch(0.7 0.14 180)', dark: 'oklch(0.7 0.14 180)' },
   },
   shopping: {
     label: 'Shopping',
-    theme: {
-      light: 'oklch(0.6 0.12 240)',
-      dark: 'oklch(0.6 0.12 240)',
-    },
+    theme: { light: 'oklch(0.61 0.13 240)', dark: 'oklch(0.61 0.13 240)' },
   },
   entertainment: {
     label: 'Entertainment',
-    theme: {
-      light: 'oklch(0.7 0.14 180)',
-      dark: 'oklch(0.7 0.14 180)',
-    },
+    theme: { light: 'oklch(0.72 0.15 170)', dark: 'oklch(0.72 0.15 170)' },
   },
   health: {
     label: 'Health & Fitness',
-    theme: {
-      light: 'oklch(0.68 0.15 180)',
-      dark: 'oklch(0.68 0.15 180)',
-    },
+    theme: { light: 'oklch(0.67 0.16 180)', dark: 'oklch(0.67 0.16 180)' },
   },
   insurance: {
     label: 'Insurance',
-    theme: {
-      light: 'oklch(0.62 0.12 200)',
-      dark: 'oklch(0.62 0.12 200)',
-    },
+    theme: { light: 'oklch(0.63 0.14 210)', dark: 'oklch(0.63 0.14 210)' },
   },
   loans: {
     label: 'Loans',
-    theme: {
-      light: 'oklch(0.72 0.13 210)',
-      dark: 'oklch(0.72 0.13 210)',
-    },
+    theme: { light: 'oklch(0.73 0.15 200)', dark: 'oklch(0.73 0.15 200)' },
   },
   savings: {
     label: 'Savings',
-    theme: {
-      light: 'oklch(0.7 0.14 185)',
-      dark: 'oklch(0.7 0.14 185)',
-    },
+    theme: { light: 'oklch(0.7 0.14 190)', dark: 'oklch(0.7 0.14 190)' },
   },
   education: {
     label: 'Education',
-    theme: {
-      light: 'oklch(0.66 0.12 230)',
-      dark: 'oklch(0.66 0.12 230)',
-    },
+    theme: { light: 'oklch(0.66 0.13 230)', dark: 'oklch(0.66 0.13 230)' },
   },
   travel: {
     label: 'Travel',
-    theme: {
-      light: 'oklch(0.75 0.13 60)',
-      dark: 'oklch(0.75 0.13 60)',
-    },
+    theme: { light: 'oklch(0.75 0.15 70)', dark: 'oklch(0.75 0.15 70)' },
   },
   gifts: {
     label: 'Gifts',
-    theme: {
-      light: 'oklch(0.68 0.12 280)',
-      dark: 'oklch(0.68 0.12 280)',
-    },
+    theme: { light: 'oklch(0.68 0.13 280)', dark: 'oklch(0.68 0.13 280)' },
   },
   other: {
     label: 'Other',
-    theme: {
-      light: 'oklch(0.7 0.11 235)',
-      dark: 'oklch(0.7 0.11 235)',
-    },
+    theme: { light: 'oklch(0.7 0.12 240)', dark: 'oklch(0.7 0.12 240)' },
   },
 } satisfies ChartConfig;
 

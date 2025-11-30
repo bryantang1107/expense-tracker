@@ -39,7 +39,7 @@ export default function ExpenseFilters() {
   }, [debouncedTitle, pathname, router]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    router.push(`${pathname}?title=${e.target.value}&page=1`);
+    setTitleValue(e.target.value);
   };
 
   const handleCategoryChange = (value: string) => {

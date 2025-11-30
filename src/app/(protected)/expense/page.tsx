@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { format, startOfDay, endOfDay } from 'date-fns';
 import prisma from '@/lib/prisma';
 import ExpenseTable from '@/components/expense/ExpenseTable';
-import ExpenseTableSkeleton from '@/components/expense/ExpenseTableSkeleton';
+import ExpenseTableSkeleton from '@/components/skeleton/ExpenseTableSkeleton';
 import ExpenseHeader from '@/components/expense/ExpenseHeader';
 import ExpenseFilters from '@/components/expense/ExpenseFilters';
 import type { ExpenseData, PrismaExpense } from '@/types/expense';

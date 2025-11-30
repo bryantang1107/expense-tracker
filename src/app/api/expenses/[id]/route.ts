@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
+import { revalidateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 import type { ExpenseFormData, PrismaExpense } from '@/types/expense';
 
@@ -58,6 +60,9 @@ export async function PUT(
       },
     });
 
+    const { userId } = await auth();
+    revalidateTag('expenses', userId!);
+
     return NextResponse.json(
       {
         data: updatedExpense,
@@ -93,6 +98,9 @@ export async function DELETE(
       const deletedExpense = await prisma.expense.delete({
         where: { id: expenseId },
       });
+
+      const { userId } = await auth();
+      revalidateTag('expenses', userId!);
 
       return NextResponse.json(
         {
